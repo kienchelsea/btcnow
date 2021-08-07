@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="/css/styles.css">
+</head>
+
+<body>
+    <form id="form-price" action="btc-price" method="POST">
+    <div class="coitainer">
+        <div class="header">
+            <h1 class="warning">THÊM CẢNH BÁO</h1>
+            <h3>Coin</h3>
+            <select name="coinType" class="select">
+                <option selected></option>
+                <option  value="BTC/USDT">BTC/USDT</option>
+                <option value="BAKE/USDT">BAKE/USDT</option>
+            </select>
+            <div class="currentPrice">
+                <h3>Giá hiện tại</h3>
+                <p>BAKE/USDT = 4</p>
+            </div>
+        </div>
+        <div class="content">
+            <h2>Cài đặt giá</h2>
+            <div class="find">
+                <div class="button">
+                    <!-- name de giong nhau de minh chi co the chon mot cai -->
+                    <!-- đặt tên gì đó mà nó mang ý nghĩa là tăng hoặc giảm đi -->
+                    <input type="radio" name="increase/decrease" value="increase">Tăng</input>
+                    <input type="radio" name="increase/decrease" value="decrease">Giảm</input>
+                </div>
+                <div class="filter">
+                    <input name = "number" type="text" placeholder="Giá trị tăng Giảm">
+                </div>
+                <div class="filter calendar">
+                    <input name="percen" type="text" placeholder="Đơn vị">
+                </div>
+                <div class="filter calendar">
+                    <select name="hour" aria-placeholder="Trong khoảng">
+                        <option selected></option>
+                        <option value="15">15 phút</option>
+                        <option value="60">1 giờ</option>
+                        <option value="120">2 giờ</option>
+                        <option value="240">4 giờ</option>
+                        <option value="720">12 giờ</option>
+                        <option value="1400">24 giờ</option>
+                    </select>
+                </div>
+            </div>
+            <div class="footer">
+                <h2>Thông báo tới</h2>
+                <div class="tele">
+                    <input name = "Telename"type="text" placeholder="Gõ tên tại đây">
+                </div>
+                <div class="onclick">
+                    <button name="resufe" type="reset">Hủy</button>
+                    <button name = "Successful"type = "submit" id = "demo" onclick="myFunction">Lưu</button>
+                </div>
+            </div>
+        </form>
+        <!-- <script>
+            var data = {
+                'name': Bake,
+                'currentprice': 8,
+            }
+            $.post('btc-price',data,function (response) {
+                response=JSON.parse(response);
+                console.log("response: ", response);
+            });
+        </script> -->
+</body>
+
+</html>

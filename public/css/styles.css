@@ -1,0 +1,70 @@
+.coitainer {
+    width: 800px;
+    margin: auto;
+}
+.header {
+    width: 800px;
+    height: 80px;
+    background-color: aqua;
+    margin-top: 150px;
+    display: inline;
+}
+h1 {
+    text-align: center;
+}
+.select {
+    width: 200px;
+    
+}
+.currentPrice {
+    float: right;
+    position: absolute;
+    top: 70px;
+    right: 300px;
+}
+.content {
+    width: 800px;
+    height: 100px;
+}   
+.find {
+    display: flex;
+    justify-content: center;
+    align-items: center;    
+}
+.find .filter input {
+    border: 0px;
+} 
+.find .filter {
+    border: 1px solid #ccc;
+    padding: 10px;
+    background-color: white;
+}
+.find .calendar {
+    margin: 0 10px;
+}
+.find button {
+   
+    text-transform: uppercase;
+    margin-right: 10px;
+    color: rgb(58, 53, 53);
+    padding: 10px 15px;
+    border: 0px;
+    cursor: pointer;
+}
+.footer {
+    width: 800px;
+    height: 100px;   
+}
+.onclick {
+    text-align: center;
+    padding: 10px 20px;
+}
+.tele input {
+    padding: 10px;
+}
+.onclick button {
+    text-transform: uppercase;
+    color: rgb(58, 53, 53);
+    padding: 10px 15px;
+    cursor: pointer;
+}

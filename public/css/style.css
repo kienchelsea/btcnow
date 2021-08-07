@@ -1,0 +1,48 @@
+.coitainer {
+    width: 800px;
+    margin: auto;
+}
+.header {
+    width: 800px;
+    height: 80px;
+    
+    margin-top: 150px;
+}
+h1 {
+    text-align: center;
+}
+button {
+    /* position: absolute; */
+    top: 150px;
+    right: 345px;
+
+}
+table{
+ width: 800px;
+}
+.content {
+    width: 800px;
+    /* height: 100px; */
+    background-color: white;
+}
+.footer {
+    width: 800px;
+    height: 100px;
+    
+}
+h3 {
+    display: inline-block;
+    margin: 15px;
+}
+.foot {
+    margin-top: 70px;
+}
+
+.edit-actions {
+    display: none;
+    margin-top: 15px;
+}
+
+.edit-actions > button {
+    padding: 10px;
+}
