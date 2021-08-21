@@ -14,12 +14,24 @@
                 <h1 class="warning">CẢNH BÁO</h1>
                 <a href="http://localhost:9683/btc-price"><button class="button">+</button></a>
             </div>
-            <h2 id="btc"></h2>
+            <h2 id="btc">Giá hiện tại : <span class="current-btc"></span></h2>
             <div class="content">
-                <table border="0" id="bang"></table>
+                <table border="0" id="bang">
+                    <thead>
+                        <tr>
+                            <th>Coin</th>
+                            <th>Giá hiện tại</th>
+                            <th>Cài đặt giá</th>
+                            <th>Trong khoảng</th>
+                            <th>Thong báo tới</th>
+                            <th>Chỉnh sửa/xóa</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
                 <div class="edit-actions">
-                    <button type="button">Lưu</button>
-                    <button type="button">Hủy</button>
+                    <button type="button" id="btnSave">Lưu</button>
+                    <button type="button" id="btnCancle">Hủy</button>
                 </div>
                 <table border ="0" id = "bang1"></table>
                
@@ -34,5 +46,5 @@
                 </div>
             </div>
         </body>
-        <script src="main.js"></script>
+        <!-- <script src="main.js"></script> -->
     </html>

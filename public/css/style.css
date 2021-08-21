@@ -46,3 +46,7 @@ h3 {
 .edit-actions > button {
     padding: 10px;
 }
+
+#bang td {
+    text-align: center;
+}

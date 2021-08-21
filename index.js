@@ -2,9 +2,18 @@ import express from "express";
 import fetch from "node-fetch";
 import bodyParser from 'body-parser';
 import mongodb from 'mongodb';
+import assert from 'assert';
+import TelegramBot from 'node-telegram-bot-api';
+// import logger from 'morgan';
+// import Btcroute from './server/router/Btcrouter';
+
 // import mongoose from "mongoose";
 const app = express();
-const port = 9683;
+const port = 9683;  
+const token = '1652059945:AAE2g-9j-wPEv3YdP1n1L9YfJ8Ig180uN94';
+const bot = new TelegramBot(token, {polling: true});
+var currency = 0;
+var product;
 let db
 var MongoClient = mongodb.MongoClient;
 // var url = 'mongodb://localhost:27017/Quanlythongtin';
@@ -28,7 +37,8 @@ MongoClient.connect("mongodb://localhost:27017", (err, client) => {
 // });
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-
+// app.use('/api/',  Btcroute)
+// app.use(logger('dev'));
 //         console.log('Unable to connect to the mongoDB server. Error:', err);
 //     } else {
 //         console.log('Connection established to', url);
@@ -76,10 +86,6 @@ app.get("/btc-price", async (req, res,) => {
     // console.log('DEMO', db);
 })
 
-// cai nay em de lam gi nhi?
-// Dòng 74 là đê tích hợp Fe và be bằng ejs còn đâu mục đích là lấy api của coinbase a ạ
-// cái này là lấy api à?
-// Vâng anh
 app.get("/btc-currentprice", async (req, res) => {
     // res.send("Hello World I am Kien");
 
@@ -96,20 +102,10 @@ app.set('view engine', 'ejs');
 app.set('views', './views');
 app.use(express.static('public'));
 
-app.get('/get-btc-price',function (req,res) {
+app.get('/get-btc-price', function (req,res) {
     console.log('GET')
     db.collection("Product").find().toArray().then(results =>{
         res.json(results)
-        // chỗ này là khi mình gửi request dạng "GET" với địa chỉ "/btc-price" thì mình lấy data
-        // từ trong db ra. ĐÓ em đang gặp khó trong vc lấy data từ mongo
-        // hàm này là để lấy data, results chứa data lấy được, sau đó chỉ cần chuyển nó sang json
-        //  và gửi về cho client
-        // vậy là client nhận được data
-        // La NÓ SẼ xuất hiện ở form 1 à  a. E chỉ biết là dùng hàm fineOne gi đó
-        // findOne là tìm 1 kết quả, vậy find chắc là tìm tất cả, giống như SELECT * FROM 'Product' ấy
-        // Hợp lý a ạ
-        // vậy client nhận đượckết quả rồi, thì giờ mình xử lý phía client tiếp
-
     }).catch(error => {
         // console.error(error)
     })
@@ -119,11 +115,36 @@ app.post('/btc-price',(req, res)=>{
     //    console.log("Đã nhận request", req.body)
     console.log('POST')
     db.collection("Product").insertOne(req.body).then(results => {
-    
     res.json(results)
 }).catch(error => {
     console.error(error)
    })
+})
+app.post('/update-data',(req, res)=>{
+    var item = {
+        title: req.body.title,
+        content: req.body.content,
+        author: req.body.author
+    };
+    
+    var id = req.body.id;
+    mongodb.connect("mongodb://localhost:27017", function(err, db){
+        assert.equal(null, err);
+        db.collection('Quanlythongtin').updateOne({"_id": objectId(id)}, {$set: item}, function(err, result) {
+            assert.equal(null, err);
+            console.log('item inserted');
+            db.close();
+        });
+    }); 
+    console.log(req.body)
+    // console.log('POST')
+    // db.collection("Product").insertOne(req.body).then(results => {
+    
+    // res.json(results)
+    // }).catch(error => {
+    //     console.error(error)
+    // })nut́
+
 })
 // app.get('/Product/:610c00747e3fa80434a40db6',function(req,res){
 //     db.collection("Product",function(err,collection){
@@ -138,4 +159,64 @@ app.post('/btc-price',(req, res)=>{
 //     });
 //     res.render(indexx)
 //     });
+
+async function getData() {
+    let coinBase = await fetch('https://api.coinbase.com/v2/prices/spot?currency=USD');
+    // let products = await fetch('http://localhost:9683/get-btc-price');
+    coinBase = await coinBase.json();
+    // products = await products.json();
+    return {coinBase};
+}
+
+const {coinBase} = await getData();
+currency = coinBase.data.amount;
+var products = await db.collection("Product").find().toArray();
+product = products.find(x => x._id == '61156cc92b0ed76a0c53fec5');
+var checkNotify = product.checkNotify;        // lấy giá trị check thông báo,
+if (checkNotify == undefined) {     // Nếu ko có trường check thì set giá trị là false => không thông báo.
+    checkNotify = false;
+} else if (checkNotify == "on") {       // Nếu có giá trị là on thì set giá trị là true => thông báo.
+    checkNotify == true;
+}
+
+// Lấy số giờ thông báo.
+var deltaHour = product.hour;
+
+// Hiển thị giờ thông báo
+var stringDeltaHour = '';
+if (deltaHour >= 60) {                       // Nếu lớn hơn 60 phút thì hiển thị là h, ví dụ 60p là 1h.
+    let newHour = deltaHour/60;
+    stringDeltaHour = newHour + 'h';
+} else {
+    stringDeltaHour = deltaHour + 'm';      // Nếu nhỏ hơn 60p thì hiển thị là m, ví dụ 15m.
+}
+
+function intervalFunc() {
+    if (checkNotify)            // Check xem có được thông báo hay không?
+    {
+        var status = product["increase/decrease"] === "increase" ? true : false;    // true là tăng, false là giảm.
+        var statusString;           // Chuổi hiển thị
+        var detal = 0;              // Số chênh lệch giữa 2 giá trị cũ, mới.
+        var currentMoney = 0;       // Số tiền mới.
+        if (status) {               // Nếu tăng thì cộng.
+            currentMoney = parseFloat(currency) + (currency * product.number/100);      // Tăng
+            detal = parseFloat(currentMoney) - parseFloat(currency);    // Tăng nên giá trị sau khi tăng lớn hơn giá trị cũ.
+            statusString = "Tăng";
+    } else {                        // Nếu giảm thì trừ.
+            currentMoney = parseFloat(currency) - (currency * product.number/100);      // giảm
+            detal = parseFloat(currency) - parseFloat(currentMoney);    // Giảm thì giá trị sau khi giảm sẽ nhỏ hơn giá trị ban đâu.
+            statusString = "Giảm";
+        }
+        // :
+        // var minutes = date.getMinutes();
+        // var time = (hour < 10 ? "0" + hour : hour) + "h" + (minutes < 10 ? "0" + minutes : minutes);
+        // var string = "BTC giá 45.000& (tăng 2000& so với 15m trước)- được thông báo tới @minh @kienle";
+        // bot.sendMessage(445473283, "BTC giá " + currentMoney.toFixed(2) + "$ (" + statusString + " " + detal.toFixed(2) + "$ so với " + stringDeltaHour + " trước)");
+        bot.sendMessage(1574318924, "BTC giá " + currentMoney.toFixed(2) + "$ (" + statusString + " " + detal.toFixed(2) + "$ so với " + stringDeltaHour + " trước)");
+    }
+}
+setInterval(intervalFunc, 10000);
+// setInterval(intervalFunc, deltaHour * 60 * 1000);       // Ví dụ 1h = 60p = 60 * 60 giây = 60 * 60 * 1000 miligiây => thời gian cài đặt thông báo.
+
+
 app.listen(port, () => console.log("Linstening on port" + port));

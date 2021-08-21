@@ -17,28 +17,26 @@
             <h3>Coin</h3>
             <select name="coinType" class="select">
                 <option selected></option>
-                <option  value="BTC/USDT">BTC/USDT</option>
+                <option value="BTC/USDT">BTC/USDT</option>
                 <option value="BAKE/USDT">BAKE/USDT</option>
             </select>
-            <div class="currentPrice">
+            <!-- <div class="currentPrice">
                 <h3>Giá hiện tại</h3>
                 <p>BAKE/USDT = 4</p>
-            </div>
+            </div> -->
         </div>
         <div class="content">
             <h2>Cài đặt giá</h2>
             <div class="find">
                 <div class="button">
-                    <!-- name de giong nhau de minh chi co the chon mot cai -->
-                    <!-- đặt tên gì đó mà nó mang ý nghĩa là tăng hoặc giảm đi -->
                     <input type="radio" name="increase/decrease" value="increase">Tăng</input>
                     <input type="radio" name="increase/decrease" value="decrease">Giảm</input>
                 </div>
                 <div class="filter">
-                    <input name = "number" type="text" placeholder="Giá trị tăng Giảm">
+                    <input onchange="checkData()" id='number' name = "number" type="text" placeholder="Giá trị tăng Giảm">
                 </div>
                 <div class="filter calendar">
-                    <input name="percen" type="text" placeholder="Đơn vị">
+                    <input onchange="checkData()" id='percent' name="percen" type="text" placeholder="Đơn vị">
                 </div>
                 <div class="filter calendar">
                     <select name="hour" aria-placeholder="Trong khoảng">
@@ -52,6 +50,9 @@
                     </select>
                 </div>
             </div>
+
+            <input checked='false' style="display: none;" type="checkbox" name="checkNotify" id="checkNotify" />
+
             <div class="footer">
                 <h2>Thông báo tới</h2>
                 <div class="tele">
@@ -59,20 +60,42 @@
                 </div>
                 <div class="onclick">
                     <button name="resufe" type="reset">Hủy</button>
-                    <button name = "Successful"type = "submit" id = "demo" onclick="myFunction">Lưu</button>
+                    <button name = "Successful"type = "submit" id = "demo" onclick="myFunction()">Lưu</button>
                 </div>
             </div>
         </form>
-        <!-- <script>
-            var data = {
-                'name': Bake,
-                'currentprice': 8,
+        <script>
+            function myFunction() {
+                alert("Thông tin đã lưu thành công");
             }
-            $.post('btc-price',data,function (response) {
-                response=JSON.parse(response);
-                console.log("response: ", response);
-            });
-        </script> -->
+        </script>
 </body>
+
+<script>
+
+    function checkData() {
+        var number = 0;
+        var percent = 0;
+        var perc = document.getElementById('percent').value;
+        var num = document.getElementById('number').value;  
+        if (num.trim() == '') {             // check giá trị có chưa? ví dụ nhập nguyên dấu cách là chưa có. .trim() là hàm loại bỏ dấu cách ở 2 đầu của chuỗi.
+            number = 0                      // Nếu chưa có giá trị thì set = 0 để tính toán.
+        } else {
+            number = parseInt(num);         // Có giá trị thì convert về kiểu số nguyên.
+        }
+        if (perc.trim() == '') {            // Tương tự trên.
+            percent = 0;
+        } else {
+            percent = parseInt(perc.replace("%", ""));      // Xóa kí tự % khi người dùng nhập 15% thì giá trị sẽ là 15.
+        }
+        if ((number - percent) > 0)             // Check x > y đúng thì set giá trị của trường checkNotify = true. sai thì = false.
+        {
+            document.getElementById('checkNotify').checked = true;
+        } else {
+            document.getElementById('checkNotify').checked = false;
+        }
+    }
+
+</script>
 
 </html>
