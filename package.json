@@ -21,9 +21,13 @@
     "node-fetch": "^2.6.1",
     "node-telegram-bot-api": "^0.54.0"
   },
+  "engines": {
+    "node": "14.x"
+  },
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "nodemon": "^2.0.12"
   },
   "description": ""
+ 
 }
