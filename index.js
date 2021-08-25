@@ -171,28 +171,43 @@ async function getData() {
 const {coinBase} = await getData();
 currency = coinBase.data.amount;
 var products = await db.collection("Product").find().toArray();
-product = products.find(x => x._id == '61156cc92b0ed76a0c53fec5');
-var checkNotify = product.checkNotify;        // lấy giá trị check thông báo,
-if (checkNotify == undefined) {     // Nếu ko có trường check thì set giá trị là false => không thông báo.
-    checkNotify = false;
-} else if (checkNotify == "on") {       // Nếu có giá trị là on thì set giá trị là true => thông báo.
-    checkNotify == true;
+console.log("PRODUCTS", products)
+product = products.find(x => x._id == '61113570304e22373847a035');
+var checkNotify = product.checkNotify; 
+if (product !== undefined) {
+           // lấy giá trị check thông báo,
+    if (checkNotify == undefined) {     // Nếu ko có trường check thì set giá trị là false => không thông báo.
+        checkNotify = true;
+    }
+    if (checkNotify == "on") {       // Nếu có giá trị là on thì set giá trị là true => thông báo.
+        checkNotify == true;
+    }
 }
 
-// Lấy số giờ thông báo.
-var deltaHour = product.hour;
+if(product !== undefined) { // kiểm tra xem biến product có giá trị chưa, có rồi mới khai báo cái khác
+    var deltaHour = product.hour; // Lấy số giờ thông báo.
+    var stringDeltaHour = '';
+    if (deltaHour >= 60) {                       // Nếu lớn hơn 60 phút thì hiển thị là h, ví dụ 60p là 1h.
+        let newHour = deltaHour/60;
+        stringDeltaHour = newHour + 'h';
+    } else {
+        stringDeltaHour = deltaHour + 'm';      // Nếu nhỏ hơn 60p thì hiển thị là m, ví dụ 15m.
+    }
+}
 
 // Hiển thị giờ thông báo
-var stringDeltaHour = '';
-if (deltaHour >= 60) {                       // Nếu lớn hơn 60 phút thì hiển thị là h, ví dụ 60p là 1h.
-    let newHour = deltaHour/60;
-    stringDeltaHour = newHour + 'h';
-} else {
-    stringDeltaHour = deltaHour + 'm';      // Nếu nhỏ hơn 60p thì hiển thị là m, ví dụ 15m.
-}
+
+
+const listTelegram = [1574318924, 445473283, 422888564];
+const messageHistory = [];
+
+app.get('/get-mesage-history', function (req,res) {
+    res.json(messageHistory);
+});
 
 function intervalFunc() {
-    if (checkNotify)            // Check xem có được thông báo hay không?
+    console.log("Product", checkNotify )
+    if (checkNotify)            // Check xem có được thông báo hay không? do cái này đang là false nên nó không chạy vào chỗ send này
     {
         var status = product["increase/decrease"] === "increase" ? true : false;    // true là tăng, false là giảm.
         var statusString;           // Chuổi hiển thị
@@ -202,21 +217,32 @@ function intervalFunc() {
             currentMoney = parseFloat(currency) + (currency * product.number/100);      // Tăng
             detal = parseFloat(currentMoney) - parseFloat(currency);    // Tăng nên giá trị sau khi tăng lớn hơn giá trị cũ.
             statusString = "Tăng";
-    } else {                        // Nếu giảm thì trừ.
+        } else {                        // Nếu giảm thì trừ.
             currentMoney = parseFloat(currency) - (currency * product.number/100);      // giảm
             detal = parseFloat(currency) - parseFloat(currentMoney);    // Giảm thì giá trị sau khi giảm sẽ nhỏ hơn giá trị ban đâu.
             statusString = "Giảm";
         }
-        // :
-        // var minutes = date.getMinutes();
-        // var time = (hour < 10 ? "0" + hour : hour) + "h" + (minutes < 10 ? "0" + minutes : minutes);
-        // var string = "BTC giá 45.000& (tăng 2000& so với 15m trước)- được thông báo tới @minh @kienle";
-        // bot.sendMessage(445473283, "BTC giá " + currentMoney.toFixed(2) + "$ (" + statusString + " " + detal.toFixed(2) + "$ so với " + stringDeltaHour + " trước)");
-        bot.sendMessage(1574318924, "BTC giá " + currentMoney.toFixed(2) + "$ (" + statusString + " " + detal.toFixed(2) + "$ so với " + stringDeltaHour + " trước)");
+        console.log("message sent")
+     
+        listTelegram.forEach((teleID) => {
+            // bot.sendMessage(teleID,  "BTC giá " + Number(currency).toLocaleString('en-US', { minimumFractionDigits: 2 }) + "$ (" + statusString + " " + Number(detal.toFixed(2)).toLocaleString('en-US', { minimumFractionDigits: 2 })  + "$ so với " + stringDeltaHour + " trước)");
+            messageHistory.push({
+                sentTime: Date.now(),
+                coinType: product.coinType,
+                currentMoney: Number(currency).toLocaleString('en-US', { minimumFractionDigits: 2 }),
+                change: statusString,
+                price: Number(detal.toFixed(2)).toLocaleString('en-US', { minimumFractionDigits: 2 }),
+                timeago: stringDeltaHour,
+                target: teleID
+              
+            })
+        })
     }
+    // console.log(messageHistory)
+    console.log(currency);
+    console.log(currentMoney);
 }
-setInterval(intervalFunc, 10000);
-// setInterval(intervalFunc, deltaHour * 60 * 1000);       // Ví dụ 1h = 60p = 60 * 60 giây = 60 * 60 * 1000 miligiây => thời gian cài đặt thông báo.
+setInterval(intervalFunc, 30000);
 
 
 app.listen(port, () => console.log("Linstening on port" + port));

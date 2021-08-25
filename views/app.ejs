@@ -6,20 +6,23 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" type="text/css" href="/css/styles.css">
+        <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="/css/styles.css">
 </head>
 
 <body>
-    <form id="form-price" action="btc-price" method="POST">
     <div class="coitainer">
+    <form id="form-price" action="btc-price" method="POST">
         <div class="header">
             <h1 class="warning">THÊM CẢNH BÁO</h1>
             <h3>Coin</h3>
-            <select name="coinType" class="select">
+            <div class="col-4">
+            <select name="coinType" class="form-control">
                 <option selected></option>
                 <option value="BTC/USDT">BTC/USDT</option>
                 <option value="BAKE/USDT">BAKE/USDT</option>
             </select>
+            </div>
             <!-- <div class="currentPrice">
                 <h3>Giá hiện tại</h3>
                 <p>BAKE/USDT = 4</p>
@@ -28,18 +31,19 @@
         <div class="content">
             <h2>Cài đặt giá</h2>
             <div class="find">
-                <div class="button">
-                    <input type="radio" name="increase/decrease" value="increase">Tăng</input>
-                    <input type="radio" name="increase/decrease" value="decrease">Giảm</input>
+                <div class="button" style="margin-right: 20px;">
+                    <input class="form-check-input" type="radio" name="increase/decrease" value="increase">Tăng</input>
+                    <br>
+                    <input class="form-check-input" type="radio" name="increase/decrease" value="decrease">Giảm</input>
                 </div>
-                <div class="filter">
-                    <input onchange="checkData()" id='number' name = "number" type="text" placeholder="Giá trị tăng Giảm">
+                <div class="">
+                    <input class="form-control" onchange="checkData()" id='number' name = "number" type="text" placeholder="Giá trị tăng Giảm">
                 </div>
-                <div class="filter calendar">
-                    <input onchange="checkData()" id='percent' name="percen" type="text" placeholder="Đơn vị">
+                <div class=" calendar">
+                    <input class="form-control" onchange="checkData()" id='percent' name="percen" type="text" placeholder="Đơn vị">
                 </div>
-                <div class="filter calendar">
-                    <select name="hour" aria-placeholder="Trong khoảng">
+                <div class=" calendar">
+                    <select class="form-control" name="hour" aria-placeholder="Trong khoảng">
                         <option selected></option>
                         <option value="15">15 phút</option>
                         <option value="60">1 giờ</option>
@@ -50,25 +54,29 @@
                     </select>
                 </div>
             </div>
-
             <input checked='false' style="display: none;" type="checkbox" name="checkNotify" id="checkNotify" />
-
-            <div class="footer">
-                <h2>Thông báo tới</h2>
-                <div class="tele">
-                    <input name = "Telename"type="text" placeholder="Gõ tên tại đây">
-                </div>
-                <div class="onclick">
-                    <button name="resufe" type="reset">Hủy</button>
-                    <button name = "Successful"type = "submit" id = "demo" onclick="myFunction()">Lưu</button>
-                </div>
+        </div>
+        <div class="footer">
+            <h2>Thông báo tới</h2>
+            <div class="tele col-4">
+                <input class="form-control" name = "Telename"type="text" placeholder="Gõ tên tại đây">
             </div>
-        </form>
+            <div class="onclick form-group">
+                <button class="btn btn-secondary" name="resufe" type="reset">Hủy</button>
+                <button class="btn btn-success" name = "Successful"type = "submit" id = "demo" onclick="myFunction()">Lưu</button>
+            </div>
+        </div>
+        <div style="clear: both;"></div>
+    </form>
+    </div>
         <script>
             function myFunction() {
                 alert("Thông tin đã lưu thành công");
             }
         </script>
+        <script type="text/javascript" src="/js/jquery-3.2.1.slim.min.js"></script>
+        <script type="text/javascript" src="/js/popper.min.js"></script>
+        <script type="text/javascript" src="/js/bootstrap.min.js"></script>
 </body>
 
 <script>

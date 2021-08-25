@@ -1,6 +1,13 @@
 .coitainer {
     width: 800px;
-    margin: auto;
+    height: 100%;
+    margin: 20px auto;
+    /* background: rgb(2,0,36);
+    background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(0,212,255,1) 100%); */
+    padding: 10px;
+    border-radius: 20px;
+    color: black;
+    border: 2px solid black;
 }
 .header {
     width: 800px;
@@ -53,7 +60,6 @@ h1 {
 }
 .footer {
     width: 800px;
-    height: 100px;   
 }
 .onclick {
     text-align: center;

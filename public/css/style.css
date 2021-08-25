@@ -1,12 +1,23 @@
+
 .coitainer {
     width: 800px;
     margin: auto;
+    padding: 10px;
+    height: auto;
+    overflow: hidden;
+    border: 2px solid black;
+    border-radius: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.Wrapper {
+    /* background-color: #E9967A; */
 }
 .header {
     width: 800px;
     height: 80px;
     
-    margin-top: 150px;
+    margin-top: 50px;
 }
 h1 {
     text-align: center;
@@ -15,7 +26,6 @@ button {
     /* position: absolute; */
     top: 150px;
     right: 345px;
-
 }
 table{
  width: 800px;
@@ -35,7 +45,7 @@ h3 {
     margin: 15px;
 }
 .foot {
-    margin-top: 70px;
+    margin-top: 20px;
 }
 
 .edit-actions {

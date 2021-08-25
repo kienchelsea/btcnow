@@ -6,18 +6,39 @@ async function getData() {
     products = await products.json();
     return {coinBase, products};
 }
+async function getMessage() {
+    let newMessage = await fetch('/get-mesage-history');
+    newMessage = await newMessage.json();
+    return newMessage;
+   
+}
 
 const deletedIDs = [];
 
 async function mapData(){
+    const newMessage = await getMessage();
     const {coinBase, products} = await getData();
     const tbody = document.querySelector('#bang tbody');
+    
+    console.log(newMessage);
+    newMessage.forEach((history) => {
+        const p = document.createElement('p');
+        p.textContent = `${new Date(history.sentTime).toLocaleString()}: ${history.coinType} giá ${history.currentMoney}& (${history.change} ${history.price} so với ${history.timeago} trước)- được thông báo tới @${history.target}`;
+        document.getElementById("message-history").append(p);
+    })
+    console.log(products);
+
+
     let tbodyContent = '';
     products.forEach((product, index) => {
+
+        console.log(coinBase.data.amount);
+        var amount = Number(coinBase.data.amount).toLocaleString();
+
         tbodyContent += `
             <tr data-id="${product._id}">
                 <td data-row="${index}" data-name="coinType">${product['coinType']}</td>
-                <td>${coinBase.data.amount}${coinBase.data.currency}</td>
+                <td>${amount} ${coinBase.data.currency}</td>
                 <td>
                     <span data-row="${index}" data-name="increase/decrease">
                         ${product["increase/decrease"] === "increase" ? "Tăng" : "Giảm"}
@@ -27,8 +48,8 @@ async function mapData(){
                 <td data-row="${index}" data-name="hour">${product['hour']}m</td>
                 <td data-row="${index}" data-name="Telename">${product['Telename']}</td>
                 <td>
-                    <button type="button" class="btn-edit">Sửa</button>
-                    <button type="button" class="btn-delete">Xóa</button>
+                    <button type="button" class="btn-edit btn btn-primary">Sửa</button>
+                    <button type="button" class="btn-delete btn btn-danger">Xóa</button>
                 </td>
             </tr>`
     });
@@ -51,9 +72,9 @@ async function mapData(){
             deletedIDs.push(closestTr.getAttribute('data-id'));
         }
     })
-
+ 
     document.querySelector('#btc .current-btc')
-    .innerHTML =coinBase.data.amount + coinBase.data.currency;
+    .innerHTML = Number(coinBase.data.amount).toLocaleString()+coinBase.data.currency;
 }
 
 /**

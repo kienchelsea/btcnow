@@ -7,16 +7,21 @@
         <title>vuejs</title>
         <link rel="stylesheet" type="text/css" href="/css/style.css">
         <script src="/js/main.js" type="module"></script>
+        <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
     </head>
     <body>
+        <div class = "Wrapper">
         <div class="coitainer">
-            <div class="header">
+            <div class="header" style="margin-bottom: 20px;">
                 <h1 class="warning">CẢNH BÁO</h1>
-                <a href="http://localhost:9683/btc-price"><button class="button">+</button></a>
+                <a href="http://localhost:9683/btc-price">
+                    <button class="button btn btn-primary">Thêm</button>
+                </a>
             </div>
             <h2 id="btc">Giá hiện tại : <span class="current-btc"></span></h2>
             <div class="content">
-                <table border="0" id="bang">
+                <div style="padding-left: 0 !important;" class="col-12">
+                <table class='table table-striped table-bordered' id="bang">
                     <thead>
                         <tr>
                             <th>Coin</th>
@@ -29,22 +34,27 @@
                     </thead>
                     <tbody></tbody>
                 </table>
+            </div>
                 <div class="edit-actions">
-                    <button type="button" id="btnSave">Lưu</button>
-                    <button type="button" id="btnCancle">Hủy</button>
+                    <div style="margin-left: 20px;" class="form-group">
+                    <button class="btn btn-primary" type="button" id="btnSave">Lưu</button>
+                    <button class="btn btn-secondary" type="button" id="btnCancle">Hủy</button>
+                </div>
                 </div>
                 <table border ="0" id = "bang1"></table>
                
             </div>
+            <hr>
             <div class="footer">
                 <div class="foot">
                     <h2>CÁC TIN NHẮN ĐÃ GỬI</h2>
-                    <p> 20/7/2021 10:00:02: BTC giá 45.000& (tăng 2000& so với
-                        15m trước)- được thông báo tới @minh @kienle</p>
-                    <p> 21/7/2021 16:00:02: BTC giá 8& (tăng 1& so với 15m
-                        trước)- được thông báo tới @minh</p>
+                    <div id="message-history"></div>
                 </div>
             </div>
+        </div>
         </body>
         <!-- <script src="main.js"></script> -->
+        <script type="text/javascript" src="/js/jquery-3.2.1.slim.min.js"></script>
+        <script type="text/javascript" src="/js/popper.min.js"></script>
+        <script type="text/javascript" src="/js/bootstrap.min.js"></script>
     </html>
