@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "server": "nodemon server.js",
-    "start": "node index.js"
+    "start": "node index.js",
+    "clean": "rm -rf build && mkdir build"
   },
   "author": "",
   "license": "ISC",
@@ -21,6 +22,7 @@
     "node-telegram-bot-api": "^0.54.0"
   },
   "devDependencies": {
+    "babel-cli": "^6.26.0",
     "nodemon": "^2.0.12"
   },
   "description": ""
