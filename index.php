@@ -1,1 +1,1 @@
-<?php header('Location: /index.ejs'); ?>
+<?php header('Location: /index.js'); ?>
