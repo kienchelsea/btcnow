@@ -6,6 +6,11 @@ async function getData() {
     products = await products.json();
     return {coinBase, products};
 }
+async function getApi() {
+    let currencyOld = await fetch('https://blockchain.info/frombtc?value=100000000&currency=USD&time=1630121400000');
+    currencyOld = await currencyOld;
+    return currencyOld;
+}
 async function getMessage() {
     let newMessage = await fetch('/get-mesage-history');
     newMessage = await newMessage.json();
@@ -19,7 +24,7 @@ async function mapData(){
     const newMessage = await getMessage();
     const {coinBase, products} = await getData();
     const tbody = document.querySelector('#bang tbody');
-    
+    // console.log(currencyOld);
     console.log(newMessage);
     newMessage.forEach((history) => {
         const p = document.createElement('p');
@@ -73,8 +78,9 @@ async function mapData(){
         }
     })
  
-    document.querySelector('#btc .current-btc')
-    .innerHTML = Number(coinBase.data.amount).toLocaleString()+coinBase.data.currency;
+    document.querySelector('#btc .current-btc').innerHTML = Number(coinBase.data.amount).toLocaleString()+coinBase.data.currency;
+    document.querySelector('#now .priceNow').innerHTML = Number(coinBase.data.amount).toLocaleString()+coinBase.data.currency;
+
 }
 
 /**

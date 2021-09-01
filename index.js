@@ -9,9 +9,9 @@ import TelegramBot from 'node-telegram-bot-api';
 
 // import mongoose from "mongoose";
 const app = express();
-const port = 9683;  
+const port = 9683;
 const token = '1652059945:AAE2g-9j-wPEv3YdP1n1L9YfJ8Ig180uN94';
-const bot = new TelegramBot(token, {polling: true});
+const bot = new TelegramBot(token, { polling: true });
 var currency = 0;
 var product;
 let db
@@ -102,44 +102,44 @@ app.set('view engine', 'ejs');
 app.set('views', './views');
 app.use(express.static('public'));
 
-app.get('/get-btc-price', function (req,res) {
+app.get('/get-btc-price', function (req, res) {
     console.log('GET')
-    db.collection("Product").find().toArray().then(results =>{
+    db.collection("Product").find().toArray().then(results => {
         res.json(results)
     }).catch(error => {
         // console.error(error)
     })
 });
 
-app.post('/btc-price',(req, res)=>{
+app.post('/btc-price', (req, res) => {
     //    console.log("Đã nhận request", req.body)
     console.log('POST')
     db.collection("Product").insertOne(req.body).then(results => {
-    res.json(results)
-}).catch(error => {
-    console.error(error)
-   })
+        res.json(results)
+    }).catch(error => {
+        console.error(error)
+    })
 })
-app.post('/update-data',(req, res)=>{
+app.post('/update-data', (req, res) => {
     var item = {
         title: req.body.title,
         content: req.body.content,
         author: req.body.author
     };
-    
+
     var id = req.body.id;
-    mongodb.connect("mongodb://localhost:27017", function(err, db){
+    mongodb.connect("mongodb://localhost:27017", function (err, db) {
         assert.equal(null, err);
-        db.collection('Quanlythongtin').updateOne({"_id": objectId(id)}, {$set: item}, function(err, result) {
+        db.collection('Quanlythongtin').updateOne({ "_id": objectId(id) }, { $set: item }, function (err, result) {
             assert.equal(null, err);
             console.log('item inserted');
             db.close();
         });
-    }); 
+    });
     console.log(req.body)
     // console.log('POST')
     // db.collection("Product").insertOne(req.body).then(results => {
-    
+
     // res.json(results)
     // }).catch(error => {
     //     console.error(error)
@@ -165,17 +165,30 @@ async function getData() {
     // let products = await fetch('http://localhost:9683/get-btc-price');
     coinBase = await coinBase.json();
     // products = await products.json();
-    return {coinBase};
+    return { coinBase };
 }
 
-const {coinBase} = await getData();
-currency = coinBase.data.amount;
+async function getApi() {
+    var abc = Date.now();
+    var currencyOld = await fetch('https://blockchain.info/frombtc?value=100000000&currency=USD&time=' + (abc - 15 * 60 * 1000));
+    return currencyOld.text();
+}
+app.get('/getApi', function (req, res) {
+    res.json(currencyOld);
+})
+var curOldText = await getApi();
+var currencyOld = parseFloat(curOldText.replace(",", ""))
+
+const { coinBase } = await getData();
+var curText = coinBase.data.amount;
+currency = parseFloat(curText.replace(",", ""));
+// console.log(currency);
 var products = await db.collection("Product").find().toArray();
 console.log("PRODUCTS", products)
-product = products.find(x => x._id == '61113570304e22373847a035');
-var checkNotify = product.checkNotify; 
+product = products.find(x => x._id == '612e0384c014505d345ce82a');
+var checkNotify = product.checkNotify;
 if (product !== undefined) {
-           // lấy giá trị check thông báo,
+    // lấy giá trị check thông báo,
     if (checkNotify == undefined) {     // Nếu ko có trường check thì set giá trị là false => không thông báo.
         checkNotify = true;
     }
@@ -184,14 +197,15 @@ if (product !== undefined) {
     }
 }
 
-if(product !== undefined) { // kiểm tra xem biến product có giá trị chưa, có rồi mới khai báo cái khác
+if (product !== undefined) { // kiểm tra xem biến product có giá trị chưa, có rồi mới khai báo cái khác
     var deltaHour = product.hour; // Lấy số giờ thông báo.
+
     var stringDeltaHour = '';
     if (deltaHour >= 60) {                       // Nếu lớn hơn 60 phút thì hiển thị là h, ví dụ 60p là 1h.
-        let newHour = deltaHour/60;
+        let newHour = deltaHour / 60;
         stringDeltaHour = newHour + 'h';
     } else {
-        stringDeltaHour = deltaHour + 'm';      // Nếu nhỏ hơn 60p thì hiển thị là m, ví dụ 15m.
+        stringDeltaHour = deltaHour + 'phút';      // Nếu nhỏ hơn 60p thì hiển thị là m, ví dụ 15m.
     }
 }
 
@@ -201,48 +215,64 @@ if(product !== undefined) { // kiểm tra xem biến product có giá trị chư
 const listTelegram = [1574318924, 445473283, 422888564];
 const messageHistory = [];
 
-app.get('/get-mesage-history', function (req,res) {
+app.get('/get-mesage-history', function (req, res) {
     res.json(messageHistory);
 });
 
-function intervalFunc() {
-    console.log("Product", checkNotify )
+async function intervalFunc() {
     if (checkNotify)            // Check xem có được thông báo hay không? do cái này đang là false nên nó không chạy vào chỗ send này
     {
         var status = product["increase/decrease"] === "increase" ? true : false;    // true là tăng, false là giảm.
         var statusString;           // Chuổi hiển thị
-        var detal = 0;              // Số chênh lệch giữa 2 giá trị cũ, mới.
+        // Số chênh lệch giữa 2 giá trị cũ, mới.
         var currentMoney = 0;       // Số tiền mới.
-        if (status) {               // Nếu tăng thì cộng.
-            currentMoney = parseFloat(currency) + (currency * product.number/100);      // Tăng
-            detal = parseFloat(currentMoney) - parseFloat(currency);    // Tăng nên giá trị sau khi tăng lớn hơn giá trị cũ.
+
+        // console.log(currencyOld);
+        // var newResult = currency - currencyOld;
+        var detal = 0;
+        var curOldText = await getApi();
+        var currencyOld = parseFloat(curOldText.replace(",", ""))
+
+        const { coinBase } = await getData();
+        var curText = coinBase.data.amount;
+        currency = parseFloat(curText.replace(",", ""));
+
+        if (currency > currencyOld) {
+            detal = currency - currencyOld;
             statusString = "Tăng";
-        } else {                        // Nếu giảm thì trừ.
-            currentMoney = parseFloat(currency) - (currency * product.number/100);      // giảm
-            detal = parseFloat(currency) - parseFloat(currentMoney);    // Giảm thì giá trị sau khi giảm sẽ nhỏ hơn giá trị ban đâu.
+            currentMoney = currency + (currency * product.number / 100);
+        } else {
+            detal = currencyOld - currency;
             statusString = "Giảm";
+            currentMoney = currency - (currency * product.number / 100);
         }
-        console.log("message sent")
-     
         listTelegram.forEach((teleID) => {
-            bot.sendMessage(teleID,  "BTC giá " + Number(currency).toLocaleString('en-US', { minimumFractionDigits: 2 }) + "$ (" + statusString + " " + Number(detal.toFixed(2)).toLocaleString('en-US', { minimumFractionDigits: 2 })  + "$ so với " + stringDeltaHour + " trước)");
+            // bot.sendMessage(1574318924,  "BTC giá " + Number(currency).toLocaleString('en-US', { minimumFractionDigits: 2 }) 
+            // + "$ (" + statusString + " " + Number(detal).toLocaleString('en-US', { minimumFractionDigits: 2 }) + "$ so với " + stringDeltaHour + " trước)");
             messageHistory.push({
                 sentTime: Date.now(),
                 coinType: product.coinType,
                 currentMoney: Number(currency).toLocaleString('en-US', { minimumFractionDigits: 2 }),
                 change: statusString,
-                price: Number(detal.toFixed(2)).toLocaleString('en-US', { minimumFractionDigits: 2 }),
+                price: Number(detal).toLocaleString('en-US', { minimumFractionDigits: 2 }),
                 timeago: stringDeltaHour,
                 target: teleID
-              
+
             })
         })
     }
+
+
+
+
     // console.log(messageHistory)
-    console.log(currency);
-    console.log(currentMoney);
+    console.log(detal);
+    //   console.log(currencyOld);
+
+
 }
 setInterval(intervalFunc, 30000);
+
 
 
 app.listen(port, () => console.log("Linstening on port" + port));
