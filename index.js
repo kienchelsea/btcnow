@@ -76,7 +76,6 @@ app.use(bodyParser.json());
 // {
 //     console.log("Error: "+error);
 // }
-
 app.get("/btc-price", async (req, res,) => {
     const response = await fetch('https://api.coinbase.com/v2/prices/spot?currency=USD');
     const rs = await response.json();
@@ -96,8 +95,6 @@ app.get("/btc-currentprice", async (req, res) => {
     // res.json(rs);
     res.render('indexx');
 });
-
-
 app.set('view engine', 'ejs');
 app.set('views', './views');
 app.use(express.static('public'));
@@ -208,17 +205,13 @@ if (product !== undefined) { // kiểm tra xem biến product có giá trị ch�
         stringDeltaHour = deltaHour + 'phút';      // Nếu nhỏ hơn 60p thì hiển thị là m, ví dụ 15m.
     }
 }
-
 // Hiển thị giờ thông báo
-
-
 const listTelegram = [1574318924, 445473283, 422888564];
 const messageHistory = [];
 
 app.get('/get-mesage-history', function (req, res) {
     res.json(messageHistory);
 });
-
 async function intervalFunc() {
     if (checkNotify)            // Check xem có được thông báo hay không? do cái này đang là false nên nó không chạy vào chỗ send này
     {
@@ -247,8 +240,8 @@ async function intervalFunc() {
             currentMoney = currency - (currency * product.number / 100);
         }
         listTelegram.forEach((teleID) => {
-            // bot.sendMessage(1574318924,  "BTC giá " + Number(currency).toLocaleString('en-US', { minimumFractionDigits: 2 }) 
-            // + "$ (" + statusString + " " + Number(detal).toLocaleString('en-US', { minimumFractionDigits: 2 }) + "$ so với " + stringDeltaHour + " trước)");
+            bot.sendMessage(teleID,  "BTC giá " + Number(currency).toLocaleString('en-US', { minimumFractionDigits: 2 }) 
+            + "$ (" + statusString + " " + Number(detal).toLocaleString('en-US', { minimumFractionDigits: 2 }) + "$ so với " + stringDeltaHour + " trước)");
             messageHistory.push({
                 sentTime: Date.now(),
                 coinType: product.coinType,
@@ -257,22 +250,12 @@ async function intervalFunc() {
                 price: Number(detal).toLocaleString('en-US', { minimumFractionDigits: 2 }),
                 timeago: stringDeltaHour,
                 target: teleID
-
             })
         })
     }
-
-
-
-
     // console.log(messageHistory)
     console.log(detal);
     //   console.log(currencyOld);
-
-
 }
 setInterval(intervalFunc, 30000);
-
-
-
 app.listen(port, () => console.log("Linstening on port" + port));
