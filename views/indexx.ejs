@@ -4,57 +4,67 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>vuejs</title>
-        <link rel="stylesheet" type="text/css" href="/css/style.css">
+        <title>Bitcoin-Now</title>
+        <link rel="stylesheet" type="text/css" href="css/style.css">
         <script src="/js/main.js" type="module"></script>
         <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
     </head>
     <body>
-        <div class = "Wrapper">
-        <div class="coitainer">
-            <div class="header" style="margin-bottom: 20px;">
-                <h1 class="warning">CẢNH BÁO</h1>
-                <a href="http://localhost:9683/btc-price">
-                    <button class="button btn btn-primary">Thêm</button>
-                </a>
-            </div>
-            <h2 id="btc">Giá hiện tại : <span class="current-btc"></span></h2>
-            <div class="content">
-                <div style="padding-left: 0 !important;" class="col-12">
-                <table class='table table-striped table-bordered' id="bang">
-                    <thead>
-                        <tr>
-                            <th>Coin</th>
-                            <th>Giá hiện tại</th>
-                            <th>Cài đặt giá</th>
-                            <th>Trong khoảng</th>
-                            <th>Thong báo tới</th>
-                            <th>Chỉnh sửa/xóa</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-                <div class="edit-actions">
-                    <div style="margin-left: 20px;" class="form-group">
-                    <button class="btn btn-primary" type="button" id="btnSave">Lưu</button>
-                    <button class="btn btn-secondary" type="button" id="btnCancle">Hủy</button>
+        <div class="content-background">
+            <div class="coitainer">
+                <div class="header" style="margin-bottom: 20px;">
+                    <h1 class="warning">CẢNH BÁO</h1>
+                    <a href="http://localhost:9683/btc-tprice">
+                        <button class="button btn btn-primary">Thêm</button>
+                    </a>
                 </div>
+                <h2 id="btc">Giá hiện tại : <span class="current-btc"></span></h2>
+                <div class="content">
+                    <div style="padding-left: 0 !important;" class="col-12">
+                        <table class='table table-striped table-bordered'
+                            id="bang">
+                            <thead>
+                                <tr>
+                                    <th>Coin</th>
+                                    <th>Giá hiện tại</th>
+                                    <th>Cài đặt giá</th>
+                                    <th>Trong khoảng</th>
+                                    <th>Thong báo tới</th>
+                                    <th>Chỉnh sửa/xóa</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <div class="edit-actions">
+                        <div style="margin-left: 20px;" class="form-group">
+                            <button class="btn btn-primary" type="button"
+                                id="btnSave">Lưu</button>
+                            <button class="btn btn-secondary" type="button"
+                                id="btnCancle">Hủy</button>
+                        </div>
+                    </div>
+                    <table border="0" id="bang1"></table>
+
                 </div>
-                <table border ="0" id = "bang1"></table>
-               
-            </div>
-            <hr>
-            <div class="footer">
-                <div class="foot">
-                    <h2>CÁC TIN NHẮN ĐÃ GỬI</h2>
-                    <div id="message-history"></div>
+                <hr>
+                <div class="footer">
+                    <div class="foot">
+                        <h2>CÁC TIN NHẮN ĐÃ GỬI</h2>
+                        <div id="message-history" class="text-content"></div>
+                    </div>
+                    <div class="btc-VN">
+                        <canvas id="myChart"></canvas>
+                        <h4 class = "text-btc">Btc changed per 10 seconds</h4>
+                    </div>
                 </div>
             </div>
         </div>
-        </body>
-        <!-- <script src="main.js"></script> -->
-        <script type="text/javascript" src="/js/jquery-3.2.1.slim.min.js"></script>
-        <script type="text/javascript" src="/js/popper.min.js"></script>
-        <script type="text/javascript" src="/js/bootstrap.min.js"></script>
-    </html>
+    </body>
+    <script src="main.js"></script>
+    <script type="text/javascript" src="/js/jquery-3.2.1.slim.min.js"></script>
+    <script type="text/javascript" src="/js/popper.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+</html>

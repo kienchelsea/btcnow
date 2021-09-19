@@ -166,8 +166,8 @@ async function getData() {
 }
 
 async function getApi() {
-    var abc = Date.now();
-    var currencyOld = await fetch('https://blockchain.info/frombtc?value=100000000&currency=USD&time=' + (abc - 15 * 60 * 1000));
+    var secondNow = Date.now();
+    var currencyOld = await fetch('https://blockchain.info/frombtc?value=100000000&currency=USD&time=' + (secondNow - 15 * 60 * 1000));
     return currencyOld.text();
 }
 app.get('/getApi', function (req, res) {
@@ -202,12 +202,13 @@ if (product !== undefined) { // kiểm tra xem biến product có giá trị ch�
         let newHour = deltaHour / 60;
         stringDeltaHour = newHour + 'h';
     } else {
-        stringDeltaHour = deltaHour + 'phút';      // Nếu nhỏ hơn 60p thì hiển thị là m, ví dụ 15m.
+        stringDeltaHour = deltaHour + ' phút ';      // Nếu nhỏ hơn 60p thì hiển thị là m, ví dụ 15m.
     }
 }
 // Hiển thị giờ thông báo
 const listTelegram = [1574318924, 445473283, 422888564];
 const messageHistory = [];
+const listName = ["@Kien", "@Minh", "@Tien"];
 
 app.get('/get-mesage-history', function (req, res) {
     res.json(messageHistory);
@@ -241,7 +242,7 @@ async function intervalFunc() {
         }
         listTelegram.forEach((teleID) => {
             bot.sendMessage(teleID,  "BTC giá " + Number(currency).toLocaleString('en-US', { minimumFractionDigits: 2 }) 
-            + "$ (" + statusString + " " + Number(detal).toLocaleString('en-US', { minimumFractionDigits: 2 }) + "$ so với " + stringDeltaHour + " trước)");
+            + "$ (" + statusString + " " + Number(detal).toLocaleString('en-US', { minimumFractionDigits: 2 }) + "$ so với " + stringDeltaHour + " trước) ");
             messageHistory.push({
                 sentTime: Date.now(),
                 coinType: product.coinType,
@@ -249,7 +250,7 @@ async function intervalFunc() {
                 change: statusString,
                 price: Number(detal).toLocaleString('en-US', { minimumFractionDigits: 2 }),
                 timeago: stringDeltaHour,
-                target: teleID
+                target : listName[Math.floor(Math.random() * listName.length)],
             })
         })
     }
@@ -257,5 +258,5 @@ async function intervalFunc() {
     console.log(detal);
     //   console.log(currencyOld);
 }
-setInterval(intervalFunc, 30000);
+setInterval(intervalFunc, 10000);
 app.listen(port, () => console.log("Linstening on port" + port));

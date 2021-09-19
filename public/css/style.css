@@ -1,22 +1,31 @@
-
+.content-background{
+background-color: rgb(8, 51, 88);
+height: 1850px;
+}
 .coitainer {
-    width: 800px;
+    z-index: 1;
+    width: 1100px;
     margin: auto;
     padding: 10px;
     height: auto;
     overflow: hidden;
-    border: 2px solid black;
+    border: 2px solid yellow;
     border-radius: 20px;
     margin-top: 20px;
     margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    flex-wrap:wrap;  
+    background-color: #FFF;
+    justify-content: center; 
 }
 
 .Wrapper {
-    background-color: #E9967A;
+    /* background-color: #E9967A; */
 }
 .header {
     width: 800px;
-    height: 80px;
+    /* height: 80px; */
     
     margin-top: 50px;
 }
@@ -28,17 +37,26 @@ button {
     top: 150px;
     right: 345px;
 }
+h4 {
+    text-align: center;
+
+  }
+  #myChart {
+      width: 1000px;
+    height: 500px !important;
+  }
 table{
  width: 800px;
+ border: 2px solid yellow;
+ border-radius: 20px;
 }
 .content {
-    width: 800px;
+    width: 100%;
     /* height: 100px; */
-    background-color: white;
 }
 .footer {
     width: 800px;
-    height: 100px;
+    /* height: 100px; */
     
 }
 h3 {
@@ -46,7 +64,7 @@ h3 {
     margin: 15px;
 }
 .foot {
-    margin-top: 20px;
+    margin-top: 50px;
 }
 
 .edit-actions {
@@ -60,4 +78,28 @@ h3 {
 
 #bang td {
     text-align: center;
+}
+h4 {
+    text-align: center;
+}
+  #myChart {
+    height: 600px !important;
+}
+#message-history {
+    overflow:hidden;
+}
+  
+.text-content{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-height: 200px;
+    max-width: 1000px;
+}
+.btc-VN {
+    height: 800px;
+}
+
+.text-btc {
+   
 }

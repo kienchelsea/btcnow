@@ -1,3 +1,52 @@
+var ctx = document.getElementById("myChart").getContext('2d');
+let prices = [];
+let labels = [];
+setInterval(async () => {
+    await fetch("https://api.coingecko.com/api/v3/coins/bitcoin").then(res => res.json()).then(data => {
+        let currentPrice = data.market_data.current_price.vnd;
+        let currentDate = new Date().toTimeString().replace('GMT+0700 (Indochina Time)', '');
+        if (prices.length >= 180) {
+            prices.shift();
+            labels.shift();
+            prices = [...prices, currentPrice];
+            labels = [...labels, currentDate];
+        } else {
+            prices.push(currentPrice);
+            labels.push(currentDate);
+        }
+        console.log(prices);
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Btc Price (vnđ)', // Name the series
+                    data: prices, // Specify the data values array
+                    fill: false,
+                    borderColor: '#ff9900', // Add custom color border (Line)
+                    backgroundColor: '#ff9900', // Add custom color background (Points and Fill)
+                    borderWidth: 1 // Specify bar border width
+                }]
+            },
+            options: {
+                responsive: true, // Instruct chart js to respond nicely.
+                maintainAspectRatio: false,
+                scales: {
+                    yAxes: [
+                        {
+                            ticks: {
+                                callback: function (label, index, labels) {
+                                    return label.toLocaleString() + ' vnđ';
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+        });
+    });
+}, 10000);
+
 
 async function getData() {
     let coinBase = await fetch('https://api.coinbase.com/v2/prices/spot?currency=USD');
@@ -28,7 +77,7 @@ async function mapData(){
     console.log(newMessage);
     newMessage.forEach((history) => {
         const p = document.createElement('p');
-        p.textContent = `${new Date(history.sentTime).toLocaleString()}: ${history.coinType} giá ${history.currentMoney}& (${history.change} ${history.price} so với ${history.timeago} trước)- được thông báo tới @${history.target}`;
+        p.textContent = `${new Date(history.sentTime).toLocaleString()}: ${history.coinType} giá ${history.currentMoney}& (${history.change} ${history.price} so với ${history.timeago} trước)- được thông báo tới ${history.target}`;
         document.getElementById("message-history").append(p);
     })
     console.log(products);
