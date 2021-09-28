@@ -106,11 +106,11 @@ app.get('/get-btc-price', function (req, res) {
     }).catch(error => {
         // console.error(error)
     })
+    
 });
 
 app.post('/btc-price', (req, res) => {
     //    console.log("Đã nhận request", req.body)
-    console.log('POST')
     db.collection("Product").insertOne(req.body).then(results => {
         res.json(results)
     }).catch(error => {
@@ -182,7 +182,7 @@ currency = parseFloat(curText.replace(",", ""));
 // console.log(currency);
 var products = await db.collection("Product").find().toArray();
 console.log("PRODUCTS", products)
-product = products.find(x => x._id == '612e0384c014505d345ce82a');
+product = products.find(x => x._id == '61307526c38fe92f003ad45e');
 var checkNotify = product.checkNotify;
 if (product !== undefined) {
     // lấy giá trị check thông báo,
@@ -241,8 +241,8 @@ async function intervalFunc() {
             currentMoney = currency - (currency * product.number / 100);
         }
         listTelegram.forEach((teleID) => {
-            bot.sendMessage(teleID,  "BTC giá " + Number(currency).toLocaleString('en-US', { minimumFractionDigits: 2 }) 
-            + "$ (" + statusString + " " + Number(detal).toLocaleString('en-US', { minimumFractionDigits: 2 }) + "$ so với " + stringDeltaHour + " trước) ");
+            // bot.sendMessage(teleID,  "BTC giá " + Number(currency).toLocaleString('en-US', { minimumFractionDigits: 2 }) 
+            // + "$ (" + statusString + " " + Number(detal).toLocaleString('en-US', { minimumFractionDigits: 2 }) + "$ so với " + stringDeltaHour + " trước) ");
             messageHistory.push({
                 sentTime: Date.now(),
                 coinType: product.coinType,
@@ -257,6 +257,7 @@ async function intervalFunc() {
     // console.log(messageHistory)
     console.log(detal);
     //   console.log(currencyOld);
+   
 }
 setInterval(intervalFunc, 10000);
 app.listen(port, () => console.log("Linstening on port" + port));
