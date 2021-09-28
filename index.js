@@ -241,8 +241,8 @@ async function intervalFunc() {
             currentMoney = currency - (currency * product.number / 100);
         }
         listTelegram.forEach((teleID) => {
-            // bot.sendMessage(teleID,  "BTC giá " + Number(currency).toLocaleString('en-US', { minimumFractionDigits: 2 }) 
-            // + "$ (" + statusString + " " + Number(detal).toLocaleString('en-US', { minimumFractionDigits: 2 }) + "$ so với " + stringDeltaHour + " trước) ");
+            bot.sendMessage(teleID,  "BTC giá " + Number(currency).toLocaleString('en-US', { minimumFractionDigits: 2 }) 
+            + "$ (" + statusString + " " + Number(detal).toLocaleString('en-US', { minimumFractionDigits: 2 }) + "$ so với " + stringDeltaHour + " trước) ");
             messageHistory.push({
                 sentTime: Date.now(),
                 coinType: product.coinType,
