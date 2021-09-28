@@ -181,8 +181,9 @@ var curText = coinBase.data.amount;
 currency = parseFloat(curText.replace(",", ""));
 // console.log(currency);
 var products = await db.collection("Product").find().toArray();
-console.log("PRODUCTS", products)
 product = products.find(x => x._id == '61307526c38fe92f003ad45e');
+console.log("PRODUCTS", products)
+if (product != null && product.checkNotify != null) {
 var checkNotify = product.checkNotify;
 if (product !== undefined) {
     // lấy giá trị check thông báo,
@@ -192,6 +193,7 @@ if (product !== undefined) {
     if (checkNotify == "on") {       // Nếu có giá trị là on thì set giá trị là true => thông báo.
         checkNotify == true;
     }
+}
 }
 
 if (product !== undefined) { // kiểm tra xem biến product có giá trị chưa, có rồi mới khai báo cái khác
@@ -259,5 +261,5 @@ async function intervalFunc() {
     //   console.log(currencyOld);
    
 }
-setInterval(intervalFunc, 10000);
+setInterval(intervalFunc, 900000);
 app.listen(port, () => console.log("Linstening on port" + port));
