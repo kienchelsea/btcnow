@@ -183,7 +183,7 @@ currency = parseFloat(curText.replace(",", ""));
 var products = await db.collection("Product").find().toArray();
 product = products.find(x => x._id == '61307526c38fe92f003ad45e');
 console.log("PRODUCTS", products)
-if (product != null && product.checkNotify != null) {
+if ( typeof query !== 'undefined' && product.checkNotify ) { //do stuff if query is defined and not null } else { }
 var checkNotify = product.checkNotify;
 if (product !== undefined) {
     // lấy giá trị check thông báo,
