@@ -19,7 +19,8 @@
     "mongoose": "^5.13.5",
     "morgan": "^1.10.0",
     "node-fetch": "^2.6.1",
-    "node-telegram-bot-api": "^0.54.0"
+    "node-telegram-bot-api": "^0.54.0",
+    "telnet": "0.0.1"
   },
   "engines": {
     "node": "14.x"
@@ -29,5 +30,4 @@
     "nodemon": "^2.0.12"
   },
   "description": ""
- 
 }

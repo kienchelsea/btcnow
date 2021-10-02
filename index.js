@@ -9,7 +9,7 @@ import TelegramBot from 'node-telegram-bot-api';
 
 // import mongoose from "mongoose";
 const app = express();
-const port = 9683;
+const port = 80;
 const token = '1652059945:AAE2g-9j-wPEv3YdP1n1L9YfJ8Ig180uN94';
 const bot = new TelegramBot(token, { polling: true });
 var currency = 0;
@@ -18,23 +18,23 @@ let db
 var MongoClient = mongodb.MongoClient;
 // var url = 'mongodb://localhost:27017/Quanlythongtin';
 MongoClient.connect("mongodb://localhost:27017", (err, client) => {
-    if (err) {
-        return console.log(err)
-    }
-    db = client.db("Quanlythongtin")
-    // console.log("Đã kết nối tới Database")
-})
-// MongoClient.connect('mongodb://127.0.0.1:27017/Quanlythongtin', function(err, db) {
-//     if (err) throw err;
-//     var Products = db.collection('Products');
-//     Products.findOne({}, function (err,res) {
-//         //nếu có lỗi
-//         if (err) throw err;
-//         //nếu thành công
-//         console.log(res);
-//     });
-//     db.close();
-// });
+        if (err) {
+            return console.log(err)
+        }
+        db = client.db("Quanlythongtin")
+            // console.log("Đã kết nối tới Database")
+    })
+    // MongoClient.connect('mongodb://127.0.0.1:27017/Quanlythongtin', function(err, db) {
+    //     if (err) throw err;
+    //     var Products = db.collection('Products');
+    //     Products.findOne({}, function (err,res) {
+    //         //nếu có lỗi
+    //         if (err) throw err;
+    //         //nếu thành công
+    //         console.log(res);
+    //     });
+    //     db.close();
+    // });
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 // app.use('/api/',  Btcroute)
@@ -76,7 +76,7 @@ app.use(bodyParser.json());
 // {
 //     console.log("Error: "+error);
 // }
-app.get("/btc-price", async (req, res,) => {
+app.get("/btc-price", async(req, res, ) => {
     const response = await fetch('https://api.coinbase.com/v2/prices/spot?currency=USD');
     const rs = await response.json();
     // console.log(rs);
@@ -85,7 +85,7 @@ app.get("/btc-price", async (req, res,) => {
     // console.log('DEMO', db);
 })
 
-app.get("/btc-currentprice", async (req, res) => {
+app.get("/btc-currentprice", async(req, res) => {
     // res.send("Hello World I am Kien");
 
     const response = await fetch('https://api.coinbase.com/v2/prices/spot?currency=USD');
@@ -99,14 +99,14 @@ app.set('view engine', 'ejs');
 app.set('views', './views');
 app.use(express.static('public'));
 
-app.get('/get-btc-price', function (req, res) {
+app.get('/get-btc-price', function(req, res) {
     console.log('GET')
     db.collection("Product").find().toArray().then(results => {
         res.json(results)
     }).catch(error => {
         // console.error(error)
     })
-    
+
 });
 
 app.post('/btc-price', (req, res) => {
@@ -118,44 +118,44 @@ app.post('/btc-price', (req, res) => {
     })
 })
 app.post('/update-data', (req, res) => {
-    var item = {
-        title: req.body.title,
-        content: req.body.content,
-        author: req.body.author
-    };
+        var item = {
+            title: req.body.title,
+            content: req.body.content,
+            author: req.body.author
+        };
 
-    var id = req.body.id;
-    mongodb.connect("mongodb://localhost:27017", function (err, db) {
-        assert.equal(null, err);
-        db.collection('Quanlythongtin').updateOne({ "_id": objectId(id) }, { $set: item }, function (err, result) {
+        var id = req.body.id;
+        mongodb.connect("mongodb://localhost:27017", function(err, db) {
             assert.equal(null, err);
-            console.log('item inserted');
-            db.close();
+            db.collection('Quanlythongtin').updateOne({ "_id": objectId(id) }, { $set: item }, function(err, result) {
+                assert.equal(null, err);
+                console.log('item inserted');
+                db.close();
+            });
         });
-    });
-    console.log(req.body)
-    // console.log('POST')
-    // db.collection("Product").insertOne(req.body).then(results => {
+        console.log(req.body)
+            // console.log('POST')
+            // db.collection("Product").insertOne(req.body).then(results => {
 
-    // res.json(results)
-    // }).catch(error => {
-    //     console.error(error)
-    // })nut́
+        // res.json(results)
+        // }).catch(error => {
+        //     console.error(error)
+        // })nut́
 
-})
-// app.get('/Product/:610c00747e3fa80434a40db6',function(req,res){
-//     db.collection("Product",function(err,collection){
-//         console.log(req.params.id);
-//         collection.findOne({_id: req.params._610c00747e3fa80434a40db6},function(err, doc) {
-//             if (doc){
-//                 console.log(doc._610c00747e3fa80434a40db6);
-//             } else {
-//                 console.log('no data');
-//             }
-//         });
-//     });
-//     res.render(indexx)
-//     });
+    })
+    // app.get('/Product/:610c00747e3fa80434a40db6',function(req,res){
+    //     db.collection("Product",function(err,collection){
+    //         console.log(req.params.id);
+    //         collection.findOne({_id: req.params._610c00747e3fa80434a40db6},function(err, doc) {
+    //             if (doc){
+    //                 console.log(doc._610c00747e3fa80434a40db6);
+    //             } else {
+    //                 console.log('no data');
+    //             }
+    //         });
+    //     });
+    //     res.render(indexx)
+    //     });
 
 async function getData() {
     let coinBase = await fetch('https://api.coinbase.com/v2/prices/spot?currency=USD');
@@ -170,7 +170,7 @@ async function getApi() {
     var currencyOld = await fetch('https://blockchain.info/frombtc?value=100000000&currency=USD&time=' + (secondNow - 15 * 60 * 1000));
     return currencyOld.text();
 }
-app.get('/getApi', function (req, res) {
+app.get('/getApi', function(req, res) {
     res.json(currencyOld);
 })
 var curOldText = await getApi();
@@ -183,28 +183,28 @@ currency = parseFloat(curText.replace(",", ""));
 var products = await db.collection("Product").find().toArray();
 product = products.find(x => x._id == '61307526c38fe92f003ad45e');
 console.log("PRODUCTS", products)
-if ( typeof checkNotify !== 'undefined' && product.checkNotify ) { //do stuff if query is defined and not null } else { }
-var checkNotify = product.checkNotify;
-if (product !== undefined) {
-    // lấy giá trị check thông báo,
-    if (checkNotify == undefined) {     // Nếu ko có trường check thì set giá trị là false => không thông báo.
-        checkNotify = true;
+if (typeof checkNotify !== 'undefined' && product.checkNotify) { //do stuff if query is defined and not null } else { }
+    var checkNotify = product.checkNotify;
+    if (product !== undefined) {
+        // lấy giá trị check thông báo,
+        if (checkNotify == undefined) { // Nếu ko có trường check thì set giá trị là false => không thông báo.
+            checkNotify = true;
+        }
+        if (checkNotify == "on") { // Nếu có giá trị là on thì set giá trị là true => thông báo.
+            checkNotify == true;
+        }
     }
-    if (checkNotify == "on") {       // Nếu có giá trị là on thì set giá trị là true => thông báo.
-        checkNotify == true;
-    }
-}
 }
 
 if (product !== undefined) { // kiểm tra xem biến product có giá trị chưa, có rồi mới khai báo cái khác
     var deltaHour = product.hour; // Lấy số giờ thông báo.
 
     var stringDeltaHour = '';
-    if (deltaHour >= 60) {                       // Nếu lớn hơn 60 phút thì hiển thị là h, ví dụ 60p là 1h.
+    if (deltaHour >= 60) { // Nếu lớn hơn 60 phút thì hiển thị là h, ví dụ 60p là 1h.
         let newHour = deltaHour / 60;
         stringDeltaHour = newHour + 'h';
     } else {
-        stringDeltaHour = deltaHour + ' phút ';      // Nếu nhỏ hơn 60p thì hiển thị là m, ví dụ 15m.
+        stringDeltaHour = deltaHour + ' phút '; // Nếu nhỏ hơn 60p thì hiển thị là m, ví dụ 15m.
     }
 }
 // Hiển thị giờ thông báo
@@ -212,16 +212,16 @@ const listTelegram = [1574318924, 445473283, 422888564];
 const messageHistory = [];
 const listName = ["@Kien", "@Minh", "@Tien"];
 
-app.get('/get-mesage-history', function (req, res) {
+app.get('/get-mesage-history', function(req, res) {
     res.json(messageHistory);
 });
 async function intervalFunc() {
-    if (checkNotify)            // Check xem có được thông báo hay không? do cái này đang là false nên nó không chạy vào chỗ send này
+    if (checkNotify) // Check xem có được thông báo hay không? do cái này đang là false nên nó không chạy vào chỗ send này
     {
-        var status = product["increase/decrease"] === "increase" ? true : false;    // true là tăng, false là giảm.
-        var statusString;           // Chuổi hiển thị
+        var status = product["increase/decrease"] === "increase" ? true : false; // true là tăng, false là giảm.
+        var statusString; // Chuổi hiển thị
         // Số chênh lệch giữa 2 giá trị cũ, mới.
-        var currentMoney = 0;       // Số tiền mới.
+        var currentMoney = 0; // Số tiền mới.
 
         // console.log(currencyOld);
         // var newResult = currency - currencyOld;
@@ -243,8 +243,8 @@ async function intervalFunc() {
             currentMoney = currency - (currency * product.number / 100);
         }
         listTelegram.forEach((teleID) => {
-            bot.sendMessage(teleID,  "BTC giá " + Number(currency).toLocaleString('en-US', { minimumFractionDigits: 2 }) 
-            + "$ (" + statusString + " " + Number(detal).toLocaleString('en-US', { minimumFractionDigits: 2 }) + "$ so với " + stringDeltaHour + " trước) ");
+            bot.sendMessage(teleID, "BTC giá " + Number(currency).toLocaleString('en-US', { minimumFractionDigits: 2 }) +
+                "$ (" + statusString + " " + Number(detal).toLocaleString('en-US', { minimumFractionDigits: 2 }) + "$ so với " + stringDeltaHour + " trước) ");
             messageHistory.push({
                 sentTime: Date.now(),
                 coinType: product.coinType,
@@ -252,14 +252,14 @@ async function intervalFunc() {
                 change: statusString,
                 price: Number(detal).toLocaleString('en-US', { minimumFractionDigits: 2 }),
                 timeago: stringDeltaHour,
-                target : listName[Math.floor(Math.random() * listName.length)],
+                target: listName[Math.floor(Math.random() * listName.length)],
             })
         })
     }
     // console.log(messageHistory)
     console.log(detal);
     //   console.log(currencyOld);
-   
+
 }
 setInterval(intervalFunc, 900000);
 app.listen(port, () => console.log("Linstening on port" + port));
