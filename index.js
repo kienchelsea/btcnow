@@ -9,8 +9,8 @@ import TelegramBot from 'node-telegram-bot-api';
 
 // import mongoose from "mongoose";
 const app = express();
-const port = 80;
-const token = '1652059945:AAE2g-9j-wPEv3YdP1n1L9YfJ8Ig180uN94';
+const port = 9683;
+const token = '2062956608:AAHemHroQP_pzNB7DkTU4gqvESbjVODNXZ4';
 const bot = new TelegramBot(token, { polling: true });
 var currency = 0;
 var product;
@@ -243,8 +243,7 @@ async function intervalFunc() {
             currentMoney = currency - (currency * product.number / 100);
         }
         listTelegram.forEach((teleID) => {
-            bot.sendMessage(teleID, "BTC giá " + Number(currency).toLocaleString('en-US', { minimumFractionDigits: 2 }) +
-                "$ (" + statusString + " " + Number(detal).toLocaleString('en-US', { minimumFractionDigits: 2 }) + "$ so với " + stringDeltaHour + " trước) ");
+
             messageHistory.push({
                 sentTime: Date.now(),
                 coinType: product.coinType,
@@ -254,6 +253,8 @@ async function intervalFunc() {
                 timeago: stringDeltaHour,
                 target: listName[Math.floor(Math.random() * listName.length)],
             })
+            bot.sendMessage(1574318924, "BTC giá " + Number(currency).toLocaleString('en-US', { minimumFractionDigits: 2 }) +
+                "$ (" + statusString + " " + Number(detal).toLocaleString('en-US', { minimumFractionDigits: 2 }) + "$ so với " + stringDeltaHour + " trước) ");
         })
     }
     // console.log(messageHistory)
